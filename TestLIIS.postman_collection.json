@@ -1,0 +1,1546 @@
+{
+	"info": {
+		"_postman_id": "622902da-aa1e-4e13-b81f-a01cde829771",
+		"name": "TestLIIS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17811767"
+	},
+	"item": [
+		{
+			"name": "LIIS Test v.1",
+			"item": [
+				{
+					"name": "Post",
+					"item": [
+						{
+							"name": "Список постов",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Test\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.response.to.be.ok;\r",
+											"    pm.response.to.be.json;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v1/api/{{Mail}}/posts",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v1",
+										"api",
+										"{{Mail}}",
+										"posts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Разместить пост",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Сохраненный id\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    ID = jsonData.id;\r",
+											"    if(ID != null){\r",
+											"    pm.collectionVariables.set(\"ID\", ID);\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Проверка статус кода\", function () {\r",
+											"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Проверка ключей\", function () {\r",
+											"var key = JSON.parse(responseBody);\r",
+											"console.log(key);\r",
+											"key = Object.keys(key);\r",
+											"console.log(key);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"https://www.imgonline.com.ua/examples/111111111111\",\r\n    \"content\": \"https://www.imgonline.com.ua/examples/bee-on-daisy.jpg\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v1/api/{{Mail}}/posts",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v1",
+										"api",
+										"{{Mail}}",
+										"posts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Найти пост по ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Test\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.response.to.be.ok;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Проверка id\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    ID = jsonData.id;\r",
+											"    pm.expect(jsonData.id).to.eql(ID);\r",
+											"    console.log(ID);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Проверка author\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    number = jsonData.author;\r",
+											"    pm.expect(jsonData.author).to.eql(number);\r",
+											"    console.log(number);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Проверка title\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    message = jsonData.title;\r",
+											"    pm.expect(jsonData.title).to.eql(message);\r",
+											"    console.log(message);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Проверка content\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    text = jsonData.content;\r",
+											"    pm.expect(jsonData.content).to.eql(text);\r",
+											"    console.log(text);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Проверка date_time\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    date_time = jsonData.publication_datetime;\r",
+											"    pm.expect(jsonData.publication_datetime).to.eql(date_time);\r",
+											"    console.log(date_time);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v1/api/{{Mail}}/post/{{ID}}",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v1",
+										"api",
+										"{{Mail}}",
+										"post",
+										"{{ID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Редактировать пост",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Test\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.response.to.be.ok;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Message\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    update = jsonData.message;\r",
+											"    pm.expect(jsonData.message).to.eql(update);\r",
+											"    console.log(update);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Type\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    success = jsonData.type;\r",
+											"    pm.expect(jsonData.type).to.eql(success);\r",
+											"    console.log(success);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Проверка ключей\", function () {\r",
+											"var key = JSON.parse(responseBody);\r",
+											"console.log(key);\r",
+											"key = Object.keys(key);\r",
+											"console.log(key);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"1232222222222222222222222222222222222222222222222222222\",\r\n    \"content\": \"123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v1/api/{{Mail}}/post/{{ID}}",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v1",
+										"api",
+										"{{Mail}}",
+										"post",
+										"{{ID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Удалить пост",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v1/api/{{Mail}}/post/{{ID}}",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v1",
+										"api",
+										"{{Mail}}",
+										"post",
+										"{{ID}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Comments",
+					"item": [
+						{
+							"name": "Список комментариев",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Test\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.response.to.be.ok;\r",
+											"    pm.response.to.be.json;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v1/api/{{Mail}}/comments",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v1",
+										"api",
+										"{{Mail}}",
+										"comments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Добавить комментарий",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Сохраненый id комментария\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    commentID = jsonData.id;\r",
+											"    pm.collectionVariables.set(\"commentID\", commentID);\r",
+											"});\r",
+											"pm.test(\"Successful POST request\", function () {\r",
+											"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Проверка ключей\", function () {\r",
+											"var key = JSON.parse(responseBody);\r",
+											"console.log(key);\r",
+											"key = Object.keys(key);\r",
+											"console.log(key);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"yourcommenttitle222222222222222222222222222222222222222222222222222222222222\",\r\n    \"content\": \"yourcommenttext\",\r\n    \"post\": {{ID}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v1/api/{{Mail}}/comments",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v1",
+										"api",
+										"{{Mail}}",
+										"comments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Найти комментарий по ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Test\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.response.to.be.ok;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Проверка id\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    ID = jsonData.id;\r",
+											"    pm.expect(jsonData.id).to.eql(ID);\r",
+											"    console.log(ID);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Проверка author\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    number = jsonData.author;\r",
+											"    pm.expect(jsonData.author).to.eql(number);\r",
+											"    console.log(number);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Проверка title\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    message = jsonData.title;\r",
+											"    pm.expect(jsonData.title).to.eql(message);\r",
+											"    console.log(message);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Проверка content\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    text = jsonData.content;\r",
+											"    pm.expect(jsonData.content).to.eql(text);\r",
+											"    console.log(text);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Проверка date_time\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    date_time = jsonData.publication_datetime;\r",
+											"    pm.expect(jsonData.publication_datetime).to.eql(date_time);\r",
+											"    console.log(date_time);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Проверка post\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    number = jsonData.post;\r",
+											"    pm.expect(jsonData.post).to.eql(number);\r",
+											"    console.log(number);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v1/api/{{Mail}}/comment/{{commentID}}",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v1",
+										"api",
+										"{{Mail}}",
+										"comment",
+										"{{commentID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Редактировать комментарий",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Test\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.response.to.be.ok;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Message\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    update = jsonData.message;\r",
+											"    pm.expect(jsonData.message).to.eql(update);\r",
+											"    console.log(update);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Type\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    success = jsonData.type;\r",
+											"    pm.expect(jsonData.type).to.eql(success);\r",
+											"    console.log(success);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Проверка ключей\", function () {\r",
+											"var key = JSON.parse(responseBody);\r",
+											"console.log(key);\r",
+											"key = Object.keys(key);\r",
+											"console.log(key);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"yourdsadsadsafname123\",\r\n    \"content\": \"yournewpfasds222222222222222222222222222222fffff\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v1/api/{{Mail}}/comment/{{commentID}}",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v1",
+										"api",
+										"{{Mail}}",
+										"comment",
+										"{{commentID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Удалить комментарий",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v1/api/{{Mail}}/comment/{{commentID}}",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v1",
+										"api",
+										"{{Mail}}",
+										"comment",
+										"{{commentID}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Зарегистрироваться в системе",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Проверка email\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    Mail = jsonData.email;\r",
+									"    pm.expect(jsonData.email).to.eql(Mail);\r",
+									"    console.log(Mail);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Проверка id\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    ID = jsonData.id;\r",
+									"    pm.expect(jsonData.id).to.eql(ID);\r",
+									"    console.log(ID);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Проверка username\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    name = jsonData.username;\r",
+									"    pm.expect(jsonData.username).to.eql(name);\r",
+									"    console.log(name);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Проверка password\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    password = jsonData.password;\r",
+									"    pm.expect(jsonData.password).to.eql(password);\r",
+									"        console.log(password);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Проверка ключей\", function () {\r",
+									"var key = JSON.parse(responseBody);\r",
+									"console.log(key);\r",
+									"key = Object.keys(key);\r",
+									"console.log(key);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "123",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"Dmitry72\",\r\n    \"email\": \"Dmitry72\",\r\n    \"password\": \"Dmitry72\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://hr.recruit.liis.su/qa0/v1/api/{{Mail}}/sign-in",
+							"protocol": "https",
+							"host": [
+								"hr",
+								"recruit",
+								"liis",
+								"su"
+							],
+							"path": [
+								"qa0",
+								"v1",
+								"api",
+								"{{Mail}}",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "LIIS Test v.2",
+			"item": [
+				{
+					"name": "Post",
+					"item": [
+						{
+							"name": "Нумерация страницы постов",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Test\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.response.to.be.ok;\r",
+											"    pm.response.to.be.json;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v2/api/{{Mail}}/posts?page=1",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v2",
+										"api",
+										"{{Mail}}",
+										"posts"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Список постов",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Test\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.response.to.be.ok;\r",
+											"    pm.response.to.be.json;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v2/api/{{Mail}}/posts",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v2",
+										"api",
+										"{{Mail}}",
+										"posts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Разместить пост",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Сохраненный id\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    v2ID = jsonData.id;\r",
+											"    if(v2ID != null){\r",
+											"    pm.collectionVariables.set(\"v2ID\", v2ID);\r",
+											"    }\r",
+											"});\r",
+											"pm.test(\"Successful POST request\", function () {\r",
+											"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"postnameПРИВЕТ1\",\r\n    \"content\": \"postcontent\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v2/api/{{Mail}}/posts",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v2",
+										"api",
+										"{{Mail}}",
+										"posts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Найти пост по ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Test\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.response.to.be.ok;\r",
+											"    pm.response.to.be.json;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v2/api/{{Mail}}/post/{{v2ID}}",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v2",
+										"api",
+										"{{Mail}}",
+										"post",
+										"{{v2ID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Редактировать пост",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"111111111111111111111111111111111111111111111111111\",\r\n    \"content\": \"11111111111111111111111111111111111111111111111\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v2/api/{{Mail}}/post/{{v2ID}}",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v2",
+										"api",
+										"{{Mail}}",
+										"post",
+										"{{v2ID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Удалить пост",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v2/api/{{Mail}}/post/{{v2ID}}",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v2",
+										"api",
+										"{{Mail}}",
+										"post",
+										"{{v2ID}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Comments",
+					"item": [
+						{
+							"name": "Написать комментарий",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Сохраненый id комментария\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    v2commentID = jsonData.id;\r",
+											"    if(v2commentID != null){\r",
+											"    pm.collectionVariables.set(\"v2commentID\", v2commentID);\r",
+											"    }\r",
+											"});\r",
+											"pm.test(\"Successful POST request\", function () {\r",
+											"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"yourcommenttitle\",\r\n    \"text\": \"yourcommenttext\",\r\n    \"post\": {{v2ID}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v2/api/{{Mail}}/comments",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v2",
+										"api",
+										"{{Mail}}",
+										"comments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Списко комментариев",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Test\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.response.to.be.ok;\r",
+											"    pm.response.to.be.json;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v2/api/{{Mail}}/comments",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v2",
+										"api",
+										"{{Mail}}",
+										"comments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Найти комментарий по ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Test\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.response.to.be.ok;\r",
+											"    pm.response.to.be.json;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v2/api/{{Mail}}/comment/{{v2commentID}}",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v2",
+										"api",
+										"{{Mail}}",
+										"comment",
+										"{{v2commentID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Редактировать комментарий",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"yourdsadsadsafname\",\r\n    \"text\": \"yournewpfasdsadasdsadsadontent\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v2/api/{{Mail}}/comment/{{v2commentID}}",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v2",
+										"api",
+										"{{Mail}}",
+										"comment",
+										"{{v2commentID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Нумерация страницы комментариев",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Test\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.response.to.be.ok;\r",
+											"    pm.response.to.be.json;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v2/api/{{Mail}}/comments?page=1",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v2",
+										"api",
+										"{{Mail}}",
+										"comments"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Удалить комментарий",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "123",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://hr.recruit.liis.su/qa0/v2/api/{{Mail}}/comment/{{v2commentID}}",
+									"protocol": "https",
+									"host": [
+										"hr",
+										"recruit",
+										"liis",
+										"su"
+									],
+									"path": [
+										"qa0",
+										"v2",
+										"api",
+										"{{Mail}}",
+										"comment",
+										"{{v2commentID}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Зарегистрироваться в системе",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Сохраненный id\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    user_ID = jsonData.id;\r",
+									"    if(user_ID != null){\r",
+									"    pm.collectionVariables.set(\"user_ID\", user_ID);\r",
+									"    }\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"dima12\",\r\n    \"email\": \"dima21\",\r\n    \"password\": \"dima12\",\r\n    \"first_name\": \"dima\",\r\n    \"middle_name\": \"dima\",\r\n    \"last_name\": \"dima\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://hr.recruit.liis.su/qa0/v2/api/{{Mail}}/sign-in",
+							"protocol": "https",
+							"host": [
+								"hr",
+								"recruit",
+								"liis",
+								"su"
+							],
+							"path": [
+								"qa0",
+								"v2",
+								"api",
+								"{{Mail}}",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Добавить функционал модератора",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "123",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": {{user_ID}}\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://hr.recruit.liis.su/qa0/v2/api/{{Mail}}/make_admin",
+							"protocol": "https",
+							"host": [
+								"hr",
+								"recruit",
+								"liis",
+								"su"
+							],
+							"path": [
+								"qa0",
+								"v2",
+								"api",
+								"{{Mail}}",
+								"make_admin"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "ID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "commentId",
+			"value": ""
+		},
+		{
+			"key": "commentID",
+			"value": ""
+		},
+		{
+			"key": "v2ID",
+			"value": ""
+		},
+		{
+			"key": "v2commentID",
+			"value": ""
+		},
+		{
+			"key": "user_ID",
+			"value": ""
+		},
+		{
+			"key": "title",
+			"value": ""
+		}
+	]
+}
